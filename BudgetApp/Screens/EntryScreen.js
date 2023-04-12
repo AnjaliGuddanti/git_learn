@@ -1,8 +1,9 @@
 
 import React,{useState} from 'react';
-import { StyleSheet, Text,TextInput,View,Button,Alert } from 'react-native';
+import { StyleSheet, Text,TextInput,View,Alert } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { addItem } from '../Redux/Items/actions';
+import { Stack, Button } from "@react-native-material/core";
 function EntryScreen({navigation}) {
   const [Budget,setBudget]=useState({Name:'',PlannedAmount:'',ActualAmount:''})
   const dispatch=useDispatch();
@@ -26,10 +27,10 @@ function EntryScreen({navigation}) {
       </View>
       <View style={{flexDirection:'row',justifyContent:'center'}}>
         <View style={{marginHorizontal:19}}>
-            <Button title='Save' onPress={()=>{handleSubmit()}}/>
+            <Button variant="contained" title='Save' color="rgb(38, 38, 38)" tintColor="white" onPress={()=>{handleSubmit()}}/>
         </View>
         <View>
-            <Button title='Show items' onPress={()=>navigation.navigate("ListingScreen")}/>
+            <Button variant="contained" title='Show items' color="rgb(38, 38, 38)" tintColor="white" onPress={()=>navigation.navigate("ListingScreen")}/>
         </View>
       </View>
     </View>
@@ -42,10 +43,10 @@ const styles=StyleSheet.create({
     marginTop:50,
   },
   input:{
-    borderColor:'black',
-    borderWidth:0.7,
+    borderColor:'rgb(38, 38, 38)',
+    borderWidth:1,
     marginBottom:25,
-    borderRadius:8
+    borderRadius:12
   },
   
 })

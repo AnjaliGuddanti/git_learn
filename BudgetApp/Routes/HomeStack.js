@@ -6,9 +6,18 @@ const Stack = createStackNavigator();
 
 function HomeStack() {
   return (
-    <Stack.Navigator>
-        <Stack.Screen name="ListingScreen" component={ListingScreen} />
-        <Stack.Screen name="EntryScreen" component={EntryScreen}/>
+    <Stack.Navigator 
+    screenOptions={{headerStyle:{
+      backgroundColor:'rgb(38, 38, 38)',
+    },
+    headerTintColor:'white',
+    headerTitleStyle:{
+      fontSize:20,
+      fontWeight:'100',
+    }
+    }}>
+        <Stack.Screen name="ListingScreen" component={ListingScreen} options={{title:'Budget Entry Listing'}} />
+        <Stack.Screen name="EntryScreen" component={EntryScreen} options={{title:'Budget Entry'}}/>
     </Stack.Navigator>
   );
 }

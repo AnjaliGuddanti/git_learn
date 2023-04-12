@@ -5,7 +5,7 @@ import { getItems } from '../Redux/Items/actions';
 import { Button } from "@react-native-material/core";
 import { FlatList } from 'react-native-gesture-handler';
 
-// import { Stack, TextInput } from "@react-native-material/core";
+
 function ListingScreen({navigation}) {
   const dispatch=useDispatch();
   useEffect(()=>{
@@ -14,36 +14,31 @@ function ListingScreen({navigation}) {
  const items=useSelector(state=>state.items.items);
  console.log(items)
   return (
+    <View>
+
     <View style={styles.container}>
-      <View style={styles.table}>
-          {/* <Stack spacing={2} style={{ margin: 16 }}>
-              <TextInput label="Label" variant="standard" />
-            </Stack> */}
-        {/* <FlatList
-          data={items}
-          renderItem={({item})=> {<Text>{item.Name}</Text>}}
-          keyExtractor={item=>item.Name}
-        /> */}
-        {/* {items.map((item)=>{
-          <View key={item.Name}>
-            <Text>{item.Name}</Text>
-          </View>
-          
-        })} */}
-         <FlatList 
+      <View style={styles.row}>
+        <Text style={styles.header}>Name</Text>
+        <Text style={styles.header}>PlannedAmount</Text>
+        <Text style={styles.header}>ActualAmount</Text>
+      </View>
+      <View style={styles.row}>
+      <FlatList 
       keyExtractor={(item)=>item.Name} 
       data={items}
       renderItem={({item})=>(
-        <View style={styles.items}>
-          <Text>{item.Name}</Text>
-          <Text>{item.PlannedAmount}</Text>
-          <Text>{item.ActualAmount}</Text>
+        <View style={styles.row}>
+          <Text style={styles.cell}>{item.Name}</Text>
+          <Text style={styles.cell}>{item.PlannedAmount}</Text>
+          <Text style={styles.cell}>{item.ActualAmount}</Text>
         </View>
       )}
       /> 
       </View>
+      
+    </View>
       <View style={styles.AddButton}>
-          <Button title='Add' onPress={()=>{navigation.navigate("EntryScreen")}}/>
+          <Button variant="contained" color="rgb(38, 38, 38)" tintColor="white" title='Add' onPress={()=>{navigation.navigate("EntryScreen")}}/>
       </View>
     </View>
 
@@ -51,15 +46,28 @@ function ListingScreen({navigation}) {
 }
 
 const styles=StyleSheet.create({
-  container:{
-    flex:1,
+  container: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    borderRadius: 5,
+    marginVertical: 10,
+    padding: 10,
   },
-  table:{
-    flex:9,
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    padding:6
   },
-  AddButton:{
-   flex:1,
-   
-  }
+  header: {
+    fontWeight: 'bold',
+    fontSize:16,
+    flex: 1,
+    
+  },
+  cell: {
+    flex: 1,
+    fontSize:16,
+    
+  },
 })
 export default ListingScreen;
