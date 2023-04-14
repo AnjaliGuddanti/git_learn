@@ -1,25 +1,27 @@
 import React,{useState,useEffect} from 'react';
-import { Text, View ,StyleSheet,TextInput,TouchableOpacity,Alert,Button,Image} from 'react-native';
+import { Text, View ,StyleSheet,TextInput,TouchableOpacity,Alert,Image,Button} from 'react-native';
 import {openDatabase} from 'react-native-sqlite-storage';
 import {ImagePicker} from 'react-native-image-picker';
-import {launchImageLibrary} from 'react-native-image-picker'
+import {launchImageLibrary} from 'react-native-image-picker';
+
+
 import ImagePickerCrop from 'react-native-image-crop-picker';
 //  const blankProfile =require('../Assets/blankProfile.png');
-let db = openDatabase({name: 'ContactsDatabase.db'});
+import { IconButton, MD3Colors } from 'react-native-paper';
+let db = openDatabase({name: 'ContactsDB.db'});
 function AddEditContact({navigation,route}) {
   const {data}=route.params;
     const [name, setName] = useState('');
     const [mobileNo, setMobileNo] = useState('');
-    // const imageUrl = { uri: '../Assets/blankProfile.png' };
-
+    const [favorite ,setFavorite ]=useState("false")
     const [photo, setPhoto] = useState(null);
     const [landlineNo, setLandlineNo] = useState('');
   const saveUser = () => {
    
     db.transaction(function (tx) {
       tx.executeSql(
-        'INSERT INTO table_contact (name, mobileNo, landlineNo,photo) VALUES (?,?,?,?)',
-        [name, mobileNo, landlineNo,photo],
+        'INSERT INTO table_contact (name, mobileNo, landlineNo,photo,favorite ) VALUES (?,?,?,?,?)',
+        [name, mobileNo, landlineNo,photo,favorite ],
         (tx, results) => {
           console.log('Results', results.rowsAffected);
           if (results.rowsAffected > 0) {
@@ -45,8 +47,8 @@ function AddEditContact({navigation,route}) {
   const updateUser = () => {
     db.transaction(tx => {
       tx.executeSql(
-        'UPDATE table_contact set name=?, mobileNo=? , photo=?,landlineNo=? where contact_id=?',
-        [name, mobileNo, photo,landlineNo, route.params.data.id],
+        'UPDATE table_contact set name=?, mobileNo=? , photo=?,landlineNo=? favorite=?  where contact_id=?',
+        [name, mobileNo, photo,landlineNo,favorite , route.params.data.id],
         (tx, results) => {
           console.log('Results', results.rowsAffected);
           if (results.rowsAffected > 0) {
@@ -74,6 +76,7 @@ function AddEditContact({navigation,route}) {
       setLandlineNo(data.landlineNo)
       setPhoto(data.photo)
       setMobileNo(data.mobileNo)
+      setFavorite(data.favorite)
     }
     db.transaction(txn => {
       txn.executeSql(
@@ -85,9 +88,10 @@ function AddEditContact({navigation,route}) {
             txn.executeSql('DROP TABLE IF EXISTS table_contact', []);
             console.log("droped and creating")
             txn.executeSql(
-              'CREATE TABLE IF NOT EXISTS table_contact(contact_id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(20), mobileNo VARCHAR(20), photo VARCHAR(100),landlineNo VARCHAR(20))',
+              'CREATE TABLE IF NOT EXISTS table_contact(contact_id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(20), mobileNo VARCHAR(20), photo VARCHAR(100),landlineNo VARCHAR(20),favorite VARCHAR(5))',
               [],
             );
+            console.log("created tb")
           }
         },
         error => {
@@ -144,7 +148,8 @@ function AddEditContact({navigation,route}) {
         justifyContent: 'center',
         alignItems: 'center',
       }}>
-      
+       
+
 
       <View>
       {photo ? (
@@ -170,13 +175,14 @@ function AddEditContact({navigation,route}) {
     {photo && (
         <Image source={photo} style={{ width: 50, height: 50 }} />
       )} */}
-     
+      
       <TextInput
         placeholder="Enter User Name"
         style={styles.input}
         value={name}
         onChangeText={txt => setName(txt)}
       />
+      
       <TextInput
         placeholder="Enter mobileNo"
         value={mobileNo}
@@ -187,6 +193,12 @@ function AddEditContact({navigation,route}) {
         placeholder="Enter landline"
         value={landlineNo}
         onChangeText={txt => setLandlineNo(txt)}
+        style={[styles.input, {marginTop: 20}]}
+      />
+      <TextInput
+        placeholder="Enter Favorite "
+        value={favorite }
+        onChangeText={txt => setFavorite(txt)}
         style={[styles.input, {marginTop: 20}]}
       />
       

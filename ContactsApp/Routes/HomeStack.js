@@ -8,9 +8,8 @@ const Stack = createStackNavigator();
 function HomeStack() {
   return (
     <Stack.Navigator>
-        <Stack.Screen name="ContactList" component={ContactList} options={{title:"Contact List"}}/>
+        <Stack.Screen name="ContactList" component={ContactList} options={{title:"Contact List",headerShown: false }}/>
         <Stack.Screen name="AddEditContact" component={AddEditContact} />
-        
     </Stack.Navigator>
   );
 }

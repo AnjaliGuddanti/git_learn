@@ -1,17 +1,15 @@
-import React,{useEffect,useState} from 'react';
-import { Button, Text, View ,StyleSheet,TouchableOpacity,FlatList,Image} from 'react-native';
+import React,{useState,useEffect} from 'react';
+import { Text,View ,StyleSheet,FlatList,TouchableOpacity,Image} from 'react-native';
 import {openDatabase} from 'react-native-sqlite-storage';
 let db = openDatabase({name: 'ContactsDB.db'});
-
-function ContactList({navigation}) {
+function FavList() {
   const [userList, setUserList] = useState([]);
-  
   useEffect(() => {
     getData();
   });
   const getData = () => {
     db.transaction(tx => {
-      tx.executeSql('SELECT * FROM table_contact', [], (tx, results) => {
+      tx.executeSql('SELECT * FROM table_contact WHERE favorite="true"', [], (tx, results) => {
         var temp = [];
         for (let i = 0; i < results.rows.length; ++i)
           temp.push(results.rows.item(i));
@@ -19,6 +17,7 @@ function ContactList({navigation}) {
       });
     });
   };
+
   let deleteUser = id => {
     db.transaction(tx => {
       tx.executeSql(
@@ -47,31 +46,25 @@ function ContactList({navigation}) {
       );
     });
   };
- 
   return (
+   
     <View style={styles.container}>
       <FlatList
-        
         data={userList}
         renderItem={({item, index}) => {
           return (
-            
             <TouchableOpacity style={styles.userItem}>
-              <View style={{flexDirection:'row'}}>
-                {item.photo ? (
-                      <Image source={{ uri: item.photo }} style={{ width: 58, height: 58,borderRadius:29 ,marginLeft:5}} />
-                    ) : (
-                      <Image source={require('../Assets/blankProfile.png')} style={{ width: 58, height: 58,borderRadius:29,marginLeft:5 }} />
-                    )}
-                <Text style={styles.itemText}>{ item.name}</Text>
-                {/* <Text style={styles.itemText}>{'mobile: ' + item.mobileNo}</Text>
-                <Text style={styles.itemText}>{'landline: ' + item.landlineNo}</Text>
-                <Text style={styles.itemText}>{'Fav: ' + item.favorite}</Text> */}
-               
-              </View>
-              
+              <Text style={styles.itemText}>{'Name: ' + item.name}</Text>
+              <Text style={styles.itemText}>{'mobile: ' + item.mobileNo}</Text>
+              <Text style={styles.itemText}>{'landline: ' + item.landlineNo}</Text>
+              <Text style={styles.itemText}>{'Fav: ' + item.favorite}</Text>
+              {item.photo ? (
+        <Image source={{ uri: item.photo }} style={{ width: 150, height: 150,borderRadius:75 ,marginTop:100}} />
+      ) : (
+        <Image source={require('../Assets/blankProfile.png')} style={{ width: 150, height: 150,borderRadius:75 ,marginTop:100}} />
+      )}
               <View style={styles.belowView}>
-            <TouchableOpacity
+              <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('AddEditContact', {
                       data: {
@@ -96,18 +89,10 @@ function ContactList({navigation}) {
           );
         }}
       />
-      <TouchableOpacity
-        style={styles.addNewBtn}
-        onPress={() => {
-          navigation.navigate('AddEditContact',{ data: {
-           
-          },});
-        }}>
-        <Text style={styles.btnText}>Add New User</Text>
-      </TouchableOpacity>
-    </View>
+   </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {
@@ -134,13 +119,9 @@ const styles = StyleSheet.create({
     padding: 10,
   },
   itemText: {
-    flex:1,
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: '600',
     color: '#000',
-   
-    alignSelf:'center',
-    marginLeft:16
   },
   belowView: {
     flexDirection: 'row',
@@ -157,5 +138,4 @@ const styles = StyleSheet.create({
     height: 24,
   },
 });
-
-export default ContactList;
+export default FavList;
