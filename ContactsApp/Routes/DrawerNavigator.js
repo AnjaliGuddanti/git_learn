@@ -9,10 +9,12 @@ import FavList from '../Screens/FavList';
 const Drawer = createDrawerNavigator();
 function DrawerNavigator() {
   return (
-    <Drawer.Navigator initialRouteName="ContactList">
-        <Drawer.Screen name="HomeStack" component={HomeStack}/>
-        <Drawer.Screen name="FavStack" component={FavStack} />
+    <Drawer.Navigator>
+        <Drawer.Screen name="HomeStack" component={HomeStack} options={{
+      headerShown: false,}} />
+        <Drawer.Screen name="FavList" component={FavList}  />
     </Drawer.Navigator>
   );
 }
 export default DrawerNavigator;
+

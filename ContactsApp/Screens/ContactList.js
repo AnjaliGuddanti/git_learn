@@ -1,6 +1,7 @@
 import React,{useEffect,useState} from 'react';
 import { Button, Text, View ,StyleSheet,TouchableOpacity,FlatList,Image} from 'react-native';
 import {openDatabase} from 'react-native-sqlite-storage';
+import { SafeAreaView ,SwipeList,SwipeListView} from 'react-native-swipe-list-view';
 let db = openDatabase({name: 'ContactsDB.db'});
 
 function ContactList({navigation}) {
@@ -50,12 +51,11 @@ function ContactList({navigation}) {
  
   return (
     <View style={styles.container}>
-      <FlatList
-        
+     
+      <SwipeListView
         data={userList}
         renderItem={({item, index}) => {
           return (
-            
             <TouchableOpacity style={styles.userItem}>
               <View style={{flexDirection:'row'}}>
                 {item.photo ? (
@@ -63,15 +63,10 @@ function ContactList({navigation}) {
                     ) : (
                       <Image source={require('../Assets/blankProfile.png')} style={{ width: 58, height: 58,borderRadius:29,marginLeft:5 }} />
                     )}
-                <Text style={styles.itemText}>{ item.name}</Text>
-                {/* <Text style={styles.itemText}>{'mobile: ' + item.mobileNo}</Text>
-                <Text style={styles.itemText}>{'landline: ' + item.landlineNo}</Text>
-                <Text style={styles.itemText}>{'Fav: ' + item.favorite}</Text> */}
-               
+                <Text style={styles.itemText}>{item.contact_id}.{ item.name}</Text>
               </View>
-              
-              <View style={styles.belowView}>
-            <TouchableOpacity
+              <View style={styles.rowBack}>
+              <TouchableOpacity
                   onPress={() => {
                     navigation.navigate('AddEditContact', {
                       data: {
@@ -84,27 +79,42 @@ function ContactList({navigation}) {
                     });
                   }}>
                     <Text>Edit</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                  onPress={() => {
+              </TouchableOpacity>
+              </View>
+                <View style={styles.belowView}>
+                  <TouchableOpacity
+                    onPress={() => {
                     deleteUser(item.contact_id);
                   }}>
                     <Text>delete</Text>
-                </TouchableOpacity>
-              </View>
+                  </TouchableOpacity>
+                </View>
+               
             </TouchableOpacity>
           );
-        }}
+        }}   
+          
+        renderHiddenItem={ (data, rowMap) => (
+          <View>
+                  <Text>Left {data.index}</Text>
+                  <Text>Right</Text>
+          </View>
+          
+      )}
+       leftOpenValue={75}
+      rightOpenValue={-75}
       />
-      <TouchableOpacity
-        style={styles.addNewBtn}
-        onPress={() => {
-          navigation.navigate('AddEditContact',{ data: {
-           
-          },});
-        }}>
-        <Text style={styles.btnText}>Add New User</Text>
-      </TouchableOpacity>
+      
+              
+       
+            <TouchableOpacity
+              style={styles.addNewBtn}
+              onPress={() => {
+                navigation.navigate('AddEditContact',{ data: {
+                },});
+              }}>
+             <Text style={styles.btnText}>Add New User</Text>
+            </TouchableOpacity>
     </View>
   );
 }
