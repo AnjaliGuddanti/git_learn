@@ -10,21 +10,24 @@ function AddEditContact({navigation,route}) {
     const [mobileNo, setMobileNo] = useState('');
     const [photo, setPhoto] = useState('');
     const [landlineNo, setLandlineNo] = useState('');
-    const [favorite,setFavorite]=useState()
+    const [favorite,setFavorite]=useState(false)
     const [Id,setId]=useState();
- 
+    const [title,setTitle] =useState("Add Contact")
   useEffect(() => {
     console.log(data)
    console.log(favorite)
-    if(data!=null){
+    if(data.name!=''){
       setName(data.name)
       setLandlineNo(data.landlineNo)
       setPhoto(data.photo)
+      // setTitle("Edit Contact")
       setMobileNo(data.mobileNo)
       setFavorite(data.favorite)
-      setId(data.id)
+      console.log(favorite)
+      setId(data.id);
+     
     }
-    console.log(favorite)
+    
     db.transaction(txn => {
       txn.executeSql(
         "SELECT name FROM sqlite_master WHERE type='table' AND name='table_contact'",
@@ -157,7 +160,9 @@ const updateUser = () => {
 // };
   return (
     <ScrollView>
-      <Header title="AddEdit" navigation={navigation} modify="Add" favorite={favorite} onPress={()=>{console.log(favorite)}}/>
+      <Header title={title} navigation={navigation} modify="Add"
+       favorite={favorite} onPress={(fav)=>{console.log(fav) ; setFavorite(fav)}}/>
+
       <View style={{flex: 1,  alignItems: 'center', }}>
       {photo ? (
             <Image source={{ uri: photo }} style={{ width: 100, height: 100,borderRadius:50 ,marginTop:40}} />
@@ -191,13 +196,13 @@ const updateUser = () => {
         onChangeText={txt => setLandlineNo(txt)}
         style={[styles.input, {marginTop: 20}]}
       />
-      <TextInput
+      {/* <TextInput
         placeholder="Enter Favorite "
         value={favorite }
         keyboardType='number-pad'
         onChangeText={txt => setFavorite(txt)}
         style={[styles.input, {marginTop: 20}]}
-      />
+      /> */}
       <TouchableOpacity
         style={styles.addBtn}
         onPress={() => {

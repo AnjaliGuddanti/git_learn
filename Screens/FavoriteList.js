@@ -22,7 +22,7 @@ function FavoriteList({navigation}) {
   };
   return (
     <View>
-     <Header title="Fav list" isHome="true" navigation={navigation}/>
+     <Header title="Favorite Contacts" isHome="true" navigation={navigation}/>
         <FlatList
          data={userList}
          renderItem={({item, index}) => {

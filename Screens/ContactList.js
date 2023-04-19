@@ -119,7 +119,7 @@ const filterData = (data) => {
   return (
     
     <View style={styles.container}>
-      <Header title="ContactList" isHome="true" navigation={navigation}/>
+      <Header title="Contact List" isHome="true" navigation={navigation}/>
       <View style={styles.searchWrapperStyle}>
         <Icons size={18} name="search" color="black" style={styles.iconStyle} />
         <TextInput

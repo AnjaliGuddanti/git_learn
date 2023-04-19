@@ -1,10 +1,17 @@
-import React,{useEffect} from "react";
+import React,{useEffect,useState} from "react";
 import {View,Text,TouchableOpacity,StyleSheet} from 'react-native';
 import Icons from 'react-native-vector-icons/Ionicons';
 function Header({title,isHome,navigation,modify,onPress,favorite}){
+    const [fav,setfav]=useState(favorite)
     useEffect(()=>{
-        console.log(favorite)
-      },[])
+        setfav(favorite)
+    },[favorite,title])
+    const handleFav=()=>{
+        console.log( fav);
+        onPress(!fav)
+        setfav(!fav)
+       
+    }
     return(
         <View style={styles.container}>
             {
@@ -22,12 +29,11 @@ function Header({title,isHome,navigation,modify,onPress,favorite}){
             </View>
             {
                 modify ?
-               
-                favorite? 
-                <TouchableOpacity style={{width:'25%'}} onPress={onPress}>
+                fav? 
+                <TouchableOpacity style={{width:'25%'}} onPress={()=>handleFav()}>
                     <Icons name="star" size={30} style={{alignSelf:'center'}}/>
                 </TouchableOpacity>:
-                <TouchableOpacity style={{width:'25%'}} onPress={onPress}>
+                <TouchableOpacity style={{width:'25%'}} onPress={()=>handleFav()}>
                     <Icons name="star-outline" size={30} style={{alignSelf:'center'}}/>
                 </TouchableOpacity>
                 :
