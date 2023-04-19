@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   },
   itemText: {
     flex:1,
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: '600',
     color: '#000',
     alignSelf:'center',

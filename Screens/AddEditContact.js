@@ -10,33 +10,38 @@ function AddEditContact({navigation,route}) {
     const [mobileNo, setMobileNo] = useState('');
     const [photo, setPhoto] = useState('');
     const [landlineNo, setLandlineNo] = useState('');
-    const [favorite,setFavorite]=useState('false')
-    const [Id,setId]=useState(0);
+    const [favorite,setFavorite]=useState()
+    const [Id,setId]=useState();
  
   useEffect(() => {
     console.log(data)
+   console.log(favorite)
     if(data!=null){
       setName(data.name)
-      setLandlineNo(data.landlineNo+'')
+      setLandlineNo(data.landlineNo)
       setPhoto(data.photo)
-      setMobileNo(data.mobileNo+'')
-      setFavorite(data.favorite+'')
+      setMobileNo(data.mobileNo)
+      setFavorite(data.favorite)
       setId(data.id)
     }
+    console.log(favorite)
     db.transaction(txn => {
       txn.executeSql(
         "SELECT name FROM sqlite_master WHERE type='table' AND name='table_contact'",
         [],
+       
         (tx, res) => {
           console.log("Create database working")
           console.log('item:', res.rows.length);
+         
           if (res.rows.length == 0) {
             txn.executeSql('DROP TABLE IF EXISTS table_contact', []);
             console.log("droped and creating")
             txn.executeSql(
-              'CREATE TABLE IF NOT EXISTS table_contact(contact_id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(20), mobileNo INTEGER, photo VARCHAR(200),landlineNo INTEGER,favorite INTEGER)',
+              'CREATE TABLE IF NOT EXISTS table_contact(contact_id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(20), mobileNo VARCHAR(20), photo VARCHAR(200),landlineNo VARCHAR(10),favorite INTEGER )',
               [],
             );
+           
           }
         },
         error => {
@@ -45,7 +50,7 @@ function AddEditContact({navigation,route}) {
       );
     });
   },
-  []);
+[]);
   const goToPickImage=()=>{
     ImagePickerCrop.openPicker({
       width: 300,
@@ -110,49 +115,49 @@ const updateUser = () => {
     });
 };
 
-const getData = () => {
-    var temp = [];
-    db.transaction(tx => {
-      tx.executeSql('SELECT * FROM table_contact', [], (tx, results) => {
-        for (let i = 0; i < results.rows.length; ++i)
-        {
-            temp.push(results.rows.item(i));
-        }
-      });
-    });
-    return temp;
-};
-let deleteUser = id => {
-    db.transaction(tx => {
-      tx.executeSql(
-        'DELETE FROM  table_contact where contact_id=?',
-        [id],
-        (tx, results) => {
-          console.log('Results', results.rowsAffected);
-          if (results.rowsAffected > 0) {
-            Alert.alert(
-              'Success',
-              'User deleted successfully',
-              [
-                {
-                  text: 'Ok',
-                  onPress: () => {
-                    getData();
-                  },
-                },
-              ],
-              {cancelable: false},
-            );
-          } else {
-            Alert.alert('Please insert a valid Contact Id');
-          }
-        },
-      );
-    });
-};
+// const getData = () => {
+//     var temp = [];
+//     db.transaction(tx => {
+//       tx.executeSql('SELECT * FROM table_contact', [], (tx, results) => {
+//         for (let i = 0; i < results.rows.length; ++i)
+//         {
+//             temp.push(results.rows.item(i));
+//         }
+//       });
+//     });
+//     return temp;
+// };
+// let deleteUser = id => {
+//     db.transaction(tx => {
+//       tx.executeSql(
+//         'DELETE FROM  table_contact where contact_id=?',
+//         [id],
+//         (tx, results) => {
+//           console.log('Results', results.rowsAffected);
+//           if (results.rowsAffected > 0) {
+//             Alert.alert(
+//               'Success',
+//               'User deleted successfully',
+//               [
+//                 {
+//                   text: 'Ok',
+//                   onPress: () => {
+//                     getData();
+//                   },
+//                 },
+//               ],
+//               {cancelable: false},
+//             );
+//           } else {
+//             Alert.alert('Please insert a valid Contact Id');
+//           }
+//         },
+//       );
+//     });
+// };
   return (
     <ScrollView>
-      <Header title="AddEdit" navigation={navigation}/>
+      <Header title="AddEdit" navigation={navigation} modify="Add" favorite={favorite} onPress={()=>{console.log(favorite)}}/>
       <View style={{flex: 1,  alignItems: 'center', }}>
       {photo ? (
             <Image source={{ uri: photo }} style={{ width: 100, height: 100,borderRadius:50 ,marginTop:40}} />

@@ -1,7 +1,10 @@
 import React,{useEffect,useState} from 'react';
-import { Text, View ,StyleSheet,TouchableOpacity,Image,TextInput,Alert, FlatList} from 'react-native';
-import { Swipeable } from 'react-native-gesture-handler';
-import { SwipeListView } from 'react-native-swipe-list-view';
+import { Text, View ,StyleSheet,TouchableOpacity,Image,TextInput,Alert, FlatList,Animated,
+  TouchableHighlight,
+  StatusBar,} from 'react-native';
+  import Swipeable from 'react-native-gesture-handler/Swipeable';
+// import { SwipeListView } from 'react-native-swipe-list-view';
+import RightAction from './RightAction';
 import Header from './Header'
 import Icons from 'react-native-vector-icons/Ionicons';
 import {openDatabase} from 'react-native-sqlite-storage';
@@ -140,9 +143,39 @@ const filterData = (data) => {
         />
         }  
       </View>
-      <Swipeable>
+     
       <View style={styles.listItems}>
-      <FlatList
+       <FlatList
+       data={filterData(userList)}
+        renderItem={({item, index}) => {
+          return (
+            <Swipeable renderRightActions={(progress,dragX)=><RightAction progress={progress} dragX={dragX} 
+            onPress={()=>{ navigation.navigate('AddEditContact', {
+              data: {
+                name: item.name,
+                mobileNo:item.mobileNo,
+                landlineNo:item.landlineNo,
+                photo:item.photo,
+                favorite:item.favorite,
+                id: item.contact_id,
+              },
+            } )} }/> } >
+    
+            <View style={styles.userItem}>
+              <View style={{flexDirection:'row'}}>
+                {item.photo ? (
+                      <Image source={{ uri: item.photo }} style={{ width: 58, height: 58,borderRadius:29 ,marginLeft:5}} />
+                    ) : (
+                      <Image source={require('../Assets/blankProfile.png')} style={{ width: 58, height: 58,borderRadius:29,marginLeft:5 }} />
+                    )}
+                <Text style={styles.itemText}>{item.contact_id}.{ item.name}</Text>
+              </View>
+            </View>
+            </Swipeable>
+          );
+        }}/>
+      
+      {/* <FlatList
        data={filterData(userList)}
         renderItem={({item, index}) => {
           return (
@@ -187,10 +220,12 @@ const filterData = (data) => {
               </View>
           </View>
         )}
-        rightOpenValue={-75}
-      />
+        leftOpenValue={300}
+        rightOpenValue={-75} */}
+      {/* /> */}
+      
       </View>
-      </Swipeable>
+    
       <View style={styles.addButton}>
         <Icons name='add-circle' size={55} color='gray' onPress={()=>{
           navigation.navigate('AddEditContact',{ data: {}})
@@ -234,18 +269,21 @@ const styles = StyleSheet.create({
    height:'68%'
   },
   userItem: {
-    width: '100%',
     padding: 8,
+    height:70,
+    
   },
   itemText: {
     flex:1,
-    fontSize: 25,
+    fontSize: 20,
     fontWeight: '600',
     color: '#000',
     alignSelf:'center',
-    marginLeft:16
+    marginLeft:16,
+   
   },
   
 });
+
 
 export default ContactList;
