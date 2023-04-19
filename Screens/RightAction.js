@@ -16,7 +16,7 @@ const RightAction=({progress,dragX,onPress})=>{
               transform: [{  scale }],
             },
           ]}>
-            Edit
+            Edit/Delete
           </Animated.Text>
         </View>
       </TouchableOpacity>
@@ -33,7 +33,8 @@ const styles=StyleSheet.create({
     actionText:{
         textAlign:'center',
         color:'white',
-        fontWeight:'600',
+        fontWeight:'400',
+        fontSize:16
         
     }
 })

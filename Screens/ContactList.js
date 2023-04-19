@@ -20,7 +20,7 @@ function ContactList({navigation}) {
   const getData = () => {
     var temp = [];
     db.transaction(tx => {
-      tx.executeSql('SELECT * FROM table_contact ORDER BY name ASC', [], (tx, results) => {
+      tx.executeSql('SELECT * FROM table_contact ORDER BY LOWER(name) ASC', [], (tx, results) => {
         for (let i = 0; i < results.rows.length; ++i)
         {
             temp.push(results.rows.item(i));
@@ -150,7 +150,8 @@ const filterData = (data) => {
         renderItem={({item, index}) => {
           return (
             <Swipeable renderRightActions={(progress,dragX)=><RightAction progress={progress} dragX={dragX} 
-            onPress={()=>{ navigation.navigate('AddEditContact', {
+            onPress={
+              ()=>{ navigation.navigate('AddEditContact', {
               data: {
                 name: item.name,
                 mobileNo:item.mobileNo,
@@ -168,7 +169,7 @@ const filterData = (data) => {
                     ) : (
                       <Image source={require('../Assets/blankProfile.png')} style={{ width: 58, height: 58,borderRadius:29,marginLeft:5 }} />
                     )}
-                <Text style={styles.itemText}>{item.contact_id}.{ item.name}</Text>
+                <Text style={styles.itemText}>{ item.name}</Text>
               </View>
             </View>
             </Swipeable>

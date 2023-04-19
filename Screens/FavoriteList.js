@@ -8,10 +8,11 @@ function FavoriteList({navigation}) {
   useEffect(() => {
     getData()
   });
+  
   const getData = () => {
     var temp = [];
     db.transaction(tx => {
-      tx.executeSql('SELECT * FROM table_contact WHERE favorite==1 ORDER BY name ASC', [], (tx, results) => {
+      tx.executeSql('SELECT * FROM table_contact WHERE favorite==1 ORDER BY LOWER(name) ASC', [], (tx, results) => {
         for (let i = 0; i < results.rows.length; ++i)
         {
             temp.push(results.rows.item(i));
@@ -19,10 +20,10 @@ function FavoriteList({navigation}) {
         setUserList(temp)
       });
     });
-  };
+};
   return (
     <View>
-     <Header title="Favorite Contacts" isHome="true" navigation={navigation}/>
+     <Header title="Favorite Contact List" isHome="true" navigation={navigation}/>
         <FlatList
          data={userList}
          renderItem={({item, index}) => {

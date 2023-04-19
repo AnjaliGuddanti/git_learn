@@ -12,20 +12,19 @@ function AddEditContact({navigation,route}) {
     const [landlineNo, setLandlineNo] = useState('');
     const [favorite,setFavorite]=useState(false)
     const [Id,setId]=useState();
-    const [title,setTitle] =useState("Add Contact")
+    const [title,setTitle] =useState("Add New Contact")
   useEffect(() => {
     console.log(data)
    console.log(favorite)
-    if(data.name!=''){
+    if(data.name){
       setName(data.name)
       setLandlineNo(data.landlineNo)
       setPhoto(data.photo)
-      // setTitle("Edit Contact")
       setMobileNo(data.mobileNo)
       setFavorite(data.favorite)
       console.log(favorite)
+      setTitle("Update Contact")
       setId(data.id);
-     
     }
     
     db.transaction(txn => {
@@ -36,7 +35,6 @@ function AddEditContact({navigation,route}) {
         (tx, res) => {
           console.log("Create database working")
           console.log('item:', res.rows.length);
-         
           if (res.rows.length == 0) {
             txn.executeSql('DROP TABLE IF EXISTS table_contact', []);
             console.log("droped and creating")
@@ -65,34 +63,46 @@ function AddEditContact({navigation,route}) {
     });
   }
   const saveUser = () => {
-    db.transaction(function (tx) {
-      tx.executeSql(
-        'INSERT INTO table_contact (name, mobileNo, landlineNo,photo,favorite) VALUES (?,?,?,?,?)',
-        [name, mobileNo, landlineNo,photo,favorite],
-        (tx, results) => {
-          console.log('Results', results.rowsAffected);
-          if (results.rowsAffected > 0) {
-            Alert.alert(
-              'Success',
-              'You are Registered Successfully',
-              [
-                {
-                  text: 'Ok',
-                  onPress: () => navigation.navigate('ContactList'),
-                },
-              ],
-              {cancelable: false},
-            );
-          } else Alert.alert('Registration Failed');
-        },
-        error => {
-          console.log(error);
-        },
-      );
-    });
+    console.log(name,mobileNo,landlineNo)
+    if( name && mobileNo  && landlineNo)
+    {
+        db.transaction(function (tx) {
+          tx.executeSql(
+            'INSERT INTO table_contact (name, mobileNo, landlineNo,photo,favorite) VALUES (?,?,?,?,?)',
+            [name, mobileNo, landlineNo,photo,favorite],
+            (tx, results) => {
+              console.log('Results', results.rowsAffected);
+              if (results.rowsAffected > 0) {
+                Alert.alert(
+                  'Success',
+                  'You are Registered Successfully',
+                  [
+                    {
+                      text: 'Ok',
+                      onPress: () => navigation.navigate('ContactList'),
+                    },
+                  ],
+                  {cancelable: false},
+                );
+              } else Alert.alert('Registration Failed');
+            },
+            error => {
+              console.log(error);
+            },
+          );
+        });
+      }
+    
+    else{
+      Alert.alert('Error','Please Provide Contact Information...')
+    }
+   
+    
   };
 
-const updateUser = () => {
+  const updateUser = () => {
+    if( name && mobileNo  && landlineNo)
+    {
     db.transaction(tx => {
       console.log(Id)
       tx.executeSql(
@@ -116,52 +126,59 @@ const updateUser = () => {
         },
       );
     });
+  }
+  else{
+    Alert.alert('Error','Please Provide Contact Information...')
+  }
 };
+  
+  const getData = () => {
+      var temp = [];
+      db.transaction(tx => {
+        tx.executeSql('SELECT * FROM table_contact', [], (tx, results) => {
+          for (let i = 0; i < results.rows.length; ++i)
+          {
+              temp.push(results.rows.item(i));
+          }
+        });
+      });
+      return temp;
+  };
 
-// const getData = () => {
-//     var temp = [];
-//     db.transaction(tx => {
-//       tx.executeSql('SELECT * FROM table_contact', [], (tx, results) => {
-//         for (let i = 0; i < results.rows.length; ++i)
-//         {
-//             temp.push(results.rows.item(i));
-//         }
-//       });
-//     });
-//     return temp;
-// };
-// let deleteUser = id => {
-//     db.transaction(tx => {
-//       tx.executeSql(
-//         'DELETE FROM  table_contact where contact_id=?',
-//         [id],
-//         (tx, results) => {
-//           console.log('Results', results.rowsAffected);
-//           if (results.rowsAffected > 0) {
-//             Alert.alert(
-//               'Success',
-//               'User deleted successfully',
-//               [
-//                 {
-//                   text: 'Ok',
-//                   onPress: () => {
-//                     getData();
-//                   },
-//                 },
-//               ],
-//               {cancelable: false},
-//             );
-//           } else {
-//             Alert.alert('Please insert a valid Contact Id');
-//           }
-//         },
-//       );
-//     });
-// };
+  let deleteUser = id => {
+      db.transaction(tx => {
+        tx.executeSql(
+          'DELETE FROM  table_contact where contact_id=?',
+          [id],
+          (tx, results) => {
+            console.log('Results', results.rowsAffected);
+            if (results.rowsAffected > 0) {
+              Alert.alert(
+                'Success',
+                'User deleted successfully',
+                [
+                  {
+                    text: 'Ok',
+                    onPress: () => {
+                      navigation.goBack();
+                    },
+                  },
+                ],
+                {cancelable: false},
+              );
+              
+            } else {
+              Alert.alert('Please insert a valid Contact Id');
+            }
+          },
+        );
+      });
+    };
+
   return (
     <ScrollView>
       <Header title={title} navigation={navigation} modify="Add"
-       favorite={favorite} onPress={(fav)=>{console.log(fav) ; setFavorite(fav)}}/>
+       favorite={favorite} onPress={(fav)=>{setFavorite(fav)}}/>
 
       <View style={{flex: 1,  alignItems: 'center', }}>
       {photo ? (
@@ -203,25 +220,39 @@ const updateUser = () => {
         onChangeText={txt => setFavorite(txt)}
         style={[styles.input, {marginTop: 20}]}
       /> */}
-      <TouchableOpacity
-        style={styles.addBtn}
-        onPress={() => {
-          saveUser();
-        }}>
-        <Text style={styles.btnText}>Save User </Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        style={styles.addBtn}
-        onPress={() => {
-          updateUser();
-        }}>
-        <Text style={styles.btnText}>Update User </Text>
-      </TouchableOpacity>
+      
+      {data.name ? 
+        <View style={{flexDirection:'row',justifyContent:'center'}}>
+         <TouchableOpacity
+         style={styles.addBtn}
+         onPress={() => {
+           updateUser();
+         }}>
+         <Text style={styles.btnText}>Update User </Text>
+       </TouchableOpacity>
+       <View style={styles.addBtn}>
+          <TouchableOpacity
+          onPress={() => {
+              deleteUser(Id);
+                }}>
+              <Text style={styles.btnText}>delete</Text>
+        </TouchableOpacity>
+       </View>
+       
+     </View>
+       :
+          <TouchableOpacity
+          style={styles.addBtn}
+          onPress={() => {
+            saveUser();
+          }}>
+          <Text style={styles.btnText}>Save User </Text>
+        </TouchableOpacity>
+        }
       </View>
     </ScrollView>
   );
-}
-
+                }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -244,6 +275,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 20,
     alignSelf: 'center',
+    marginLeft:10
   },
   btnText: {
     color: '#fff',
