@@ -1,8 +1,8 @@
 import React,{useEffect,useState} from 'react';
-import { Text, View ,StyleSheet,TouchableOpacity,Image,TextInput,Alert} from 'react-native';
-
+import { Text, View ,StyleSheet,TouchableOpacity,Image,TextInput,Alert, FlatList} from 'react-native';
+import { Swipeable } from 'react-native-gesture-handler';
 import { SwipeListView } from 'react-native-swipe-list-view';
-
+import Header from './Header'
 import Icons from 'react-native-vector-icons/Ionicons';
 import {openDatabase} from 'react-native-sqlite-storage';
 let db = openDatabase({name: 'ContactsDatabase.db'});
@@ -114,7 +114,9 @@ const filterData = (data) => {
       });
   };
   return (
+    
     <View style={styles.container}>
+      <Header title="ContactList" isHome="true" navigation={navigation}/>
       <View style={styles.searchWrapperStyle}>
         <Icons size={18} name="search" color="black" style={styles.iconStyle} />
         <TextInput
@@ -138,12 +140,13 @@ const filterData = (data) => {
         />
         }  
       </View>
+      <Swipeable>
       <View style={styles.listItems}>
-      <SwipeListView
+      <FlatList
        data={filterData(userList)}
         renderItem={({item, index}) => {
           return (
-            <TouchableOpacity style={styles.userItem}>
+            <View style={styles.userItem}>
               <View style={{flexDirection:'row'}}>
                 {item.photo ? (
                       <Image source={{ uri: item.photo }} style={{ width: 58, height: 58,borderRadius:29 ,marginLeft:5}} />
@@ -152,7 +155,7 @@ const filterData = (data) => {
                     )}
                 <Text style={styles.itemText}>{item.contact_id}.{ item.name}</Text>
               </View>
-            </TouchableOpacity>
+            </View>
           );
         }}
         renderHiddenItem={ (rowData, rowMap) => (
@@ -184,16 +187,17 @@ const filterData = (data) => {
               </View>
           </View>
         )}
-        leftOpenValue={40}
-        rightOpenValue={-40}
+        rightOpenValue={-75}
       />
       </View>
+      </Swipeable>
       <View style={styles.addButton}>
         <Icons name='add-circle' size={55} color='gray' onPress={()=>{
           navigation.navigate('AddEditContact',{ data: {}})
         }}/>
       </View>
     </View>
+   
   );
 }
 
@@ -227,7 +231,7 @@ const styles = StyleSheet.create({
     margin: 0,
   },
   listItems:{
-   height:'73%'
+   height:'68%'
   },
   userItem: {
     width: '100%',

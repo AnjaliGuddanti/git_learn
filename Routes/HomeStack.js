@@ -5,22 +5,12 @@ import AddEditContact from '../Screens/AddEditContact';
 import ContactList from '../Screens/ContactList';
 const Stack = createStackNavigator();
 
-function HomeStack() {
+function HomeStack({navigation}) {
   return (
-    <Stack.Navigator  screenOptions={{
-      headerShown: true,
-      headerStyle: {
-        backgroundColor: 'gray',
-      },
-      headerTintColor: '#fff',
-      headerTitleAlign: 'center',
-      headerTitleStyle: {
-        fontWeight: 'bold',
-      },
-    }}>
-        <Stack.Screen name="ContactList" component={ContactList} options={{title:"Contact List"}}/>
+    <Stack.Navigator initialRouteName='ContactList' screenOptions={{
+      headerShown: false,}}>
+        <Stack.Screen name="ContactList" component={ContactList}/>
         <Stack.Screen name="AddEditContact" component={AddEditContact} />
-        
     </Stack.Navigator>
   );
 }

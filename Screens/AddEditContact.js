@@ -2,6 +2,7 @@ import React,{useState,useEffect} from 'react';
 import { Text, View ,StyleSheet,TextInput,TouchableOpacity,Alert ,Image,ScrollView} from 'react-native';
 import ImagePickerCrop from 'react-native-image-crop-picker';
 import {openDatabase} from 'react-native-sqlite-storage';
+import Header from './Header';
 let db = openDatabase({name: 'ContactsDatabase.db'});
 function AddEditContact({navigation,route}) {
   const {data}=route.params;
@@ -151,6 +152,7 @@ let deleteUser = id => {
 };
   return (
     <ScrollView>
+      <Header title="AddEdit" navigation={navigation}/>
       <View style={{flex: 1,  alignItems: 'center', }}>
       {photo ? (
             <Image source={{ uri: photo }} style={{ width: 100, height: 100,borderRadius:50 ,marginTop:40}} />

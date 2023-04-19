@@ -6,9 +6,9 @@ const Drawer = createDrawerNavigator();
 function DrawerNavigator() {
   return (
     <Drawer.Navigator  screenOptions={{
-      headerShown: false,}} >
+      headerShown: false,}}>
         <Drawer.Screen name="HomeStack" component={HomeStack}/>
-        <Drawer.Screen name="FavoriteList" component={FavoriteList}  />
+        <Drawer.Screen name="FavoriteList" component={FavoriteList} />
     </Drawer.Navigator>
   );
 }

@@ -1,8 +1,9 @@
 import React ,{useState,useEffect}from 'react';
 import { View,Text,FlatList,TouchableOpacity,StyleSheet,Image } from 'react-native';
 import {openDatabase} from 'react-native-sqlite-storage';
+import Header from './Header';
 let db = openDatabase({name: 'ContactsDatabase.db'});
-function FavoriteList() {
+function FavoriteList({navigation}) {
   const [userList, setUserList] = useState([]);
   useEffect(() => {
     getData()
@@ -21,6 +22,7 @@ function FavoriteList() {
   };
   return (
     <View>
+     <Header title="Fav list" isHome="true" navigation={navigation}/>
         <FlatList
          data={userList}
          renderItem={({item, index}) => {
