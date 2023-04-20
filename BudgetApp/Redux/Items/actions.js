@@ -1,18 +1,13 @@
 import { ADD_ITEMS,GET_ITEMS } from "./actionType"
 
-let items=[];
-
-export const getItems =()=> {return async dispatch=>{
-    dispatch({
-        type:GET_ITEMS,
-        payload:items
-    })
-}}
-
-export const addItem=item=> async dispatch=>{
-    items.push(item)
-    dispatch({
+export function addItem(item){
+    return{
         type:ADD_ITEMS,
-        payload:items
-    })
+        payload:item
+    }
+}
+export function getItems(){
+    return{
+        type:GET_ITEMS
+    }
 }

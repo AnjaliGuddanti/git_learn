@@ -1,73 +1,64 @@
 import React,{useEffect} from 'react';
 import { useDispatch,useSelector } from 'react-redux';
-import {View,Text,StyleSheet,TouchableHighlight} from 'react-native'
-import { getItems } from '../Redux/Items/actions';
-import { Button } from "@react-native-material/core";
+import {View,StyleSheet,ScrollView} from 'react-native'
+import {itemReducer} from '../Redux/Items/itemReducer';
 import { FlatList } from 'react-native-gesture-handler';
-
+import { Text ,Stack,Button} from "@react-native-material/core";
 
 function ListingScreen({navigation}) {
-  const dispatch=useDispatch();
-  useEffect(()=>{
-    dispatch(getItems());
-  },[])
- const items=useSelector(state=>state.items.items);
+ let items=[];
+ items=useSelector(state=>state.itemReducer);
  console.log(items)
   return (
-    <View>
-
-    <View style={styles.container}>
-      <View style={styles.row}>
-        <Text style={styles.header}>Name</Text>
-        <Text style={styles.header}>PlannedAmount</Text>
-        <Text style={styles.header}>ActualAmount</Text>
-      </View>
-      <View style={styles.row}>
-      <FlatList 
-      keyExtractor={(item)=>item.Name} 
-      data={items}
-      renderItem={({item})=>(
-        <View style={styles.row}>
-          <Text style={styles.cell}>{item.Name}</Text>
-          <Text style={styles.cell}>{item.PlannedAmount}</Text>
-          <Text style={styles.cell}>{item.ActualAmount}</Text>
-        </View>
-      )}
-      /> 
-      </View>
-      
-    </View>
-      <View style={styles.AddButton}>
-          <Button variant="contained" color="rgb(38, 38, 38)" tintColor="white" title='Add' onPress={()=>{navigation.navigate("EntryScreen")}}/>
-      </View>
-    </View>
-
+      <Stack style={styles.container}>
+        <Stack style={{height:'90%'}}> 
+          <Stack style={styles.row}>
+            <Text variant="h6"  style={styles.cell}>Item Name</Text>
+            <Text variant="h6" style={styles.cell}>Planned Amount</Text>
+            <Text variant="h6" style={styles.cell}>Actual Amount</Text>
+          </Stack>
+          <FlatList 
+          data={items}
+          renderItem={({item,index})=>(
+            <Stack style={styles.row}>
+              <Text style={styles.cell}>{item.itemName}</Text>
+              <Text style={styles.cell}>{item.plannedAmount}</Text>
+              <Text style={styles.cell}>{item.actualAmount}</Text>
+            </Stack>
+          )}
+          keyExtractor={(item, index) => index} 
+          />
+      </Stack>
+      <Stack style={{height:'10%' ,justifyContent:'flex-end'}}>
+        <Button variant="contained" color="rgb(38, 38, 38)" tintColor="white" title='Add' onPress={()=>{navigation.navigate("EntryScreen")}}/>
+      </Stack> 
+    </Stack>
   );
 }
 
 const styles=StyleSheet.create({
   container: {
-    borderWidth: 1,
-    borderColor: '#ddd',
-    borderRadius: 5,
-    marginVertical: 10,
-    padding: 10,
+    flex: 1,
+    padding: 16,
+    paddingTop: 20,
+    backgroundColor: '#fff',
+    height:'100%'
+  },
+  header:{
+    fontSize:'bold'
   },
   row: {
     flexDirection: 'row',
+    alignItems: 'center',
     justifyContent: 'space-between',
-    padding:6
-  },
-  header: {
-    fontWeight: 'bold',
-    fontSize:16,
-    flex: 1,
-    
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+    paddingVertical: 8,
   },
   cell: {
     flex: 1,
-    fontSize:16,
-    
+    textAlign: 'center',
   },
+ 
 })
 export default ListingScreen;

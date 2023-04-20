@@ -1,55 +1,66 @@
 
-import React,{useState} from 'react';
-import { StyleSheet, Text,TextInput,View,Alert } from 'react-native';
+import React,{ useState} from 'react';
+import { Alert} from 'react-native';
+import {  Button ,Stack,TextInput} from "@react-native-material/core";
 import { useDispatch } from 'react-redux';
 import { addItem } from '../Redux/Items/actions';
-import { Stack, Button } from "@react-native-material/core";
+
 function EntryScreen({navigation}) {
-  const [Budget,setBudget]=useState({Name:'',PlannedAmount:'',ActualAmount:''})
+  const [itemName, setItemName] = useState('');
+  const [plannedAmount, setPlannedAmount] = useState('');
+  const [actualAmount, setActualAmount] = useState('');
+
   const dispatch=useDispatch();
-  // const handleInputChange = (fieldName, value) => {
-  //   setBudget(prevState => ({
-  //     ...prevState,
-  //     [fieldName]: value
-  //   }));
-  // };
+  
   const handleSubmit=()=>{
-       console.log(Budget)
-      dispatch(addItem(Budget));
-      setBudget({})
+    if(itemName && plannedAmount && actualAmount){
+      dispatch(addItem({itemName, plannedAmount, actualAmount}));
+      setItemName('');
+      setPlannedAmount('')
+      setActualAmount('');
+      Alert.alert('Success','Data Saved Successfully');
+    }
+    else{
+      Alert.alert('Warning','Please Provide data');
+    }
   }
   return (
-    <View>
-      <View style={styles.group}>
-        <TextInput placeholder='Name' style={styles.input} onChangeText={(Val)=>setBudget({...Budget,Name:Val})}/>
-        <TextInput placeholder='Planned amount' style={styles.input} onChangeText={(Val)=>setBudget({...Budget,PlannedAmount:Val})}/>
-        <TextInput placeholder='Actual amount' style={styles.input} onChangeText={(Val)=>setBudget({...Budget,ActualAmount:Val})}/>
-      </View>
-      <View style={{flexDirection:'row',justifyContent:'center'}}>
-        <View style={{marginHorizontal:19}}>
-            <Button variant="contained" title='Save' color="rgb(38, 38, 38)" tintColor="white" onPress={()=>{handleSubmit()}}/>
-        </View>
-        <View>
-            <Button variant="contained" title='Show items' color="rgb(38, 38, 38)" tintColor="white" onPress={()=>navigation.navigate("ListingScreen")}/>
-        </View>
-      </View>
-    </View>
+    <Stack spacing={8} style={{marginTop:35, justifyContent:'center'}}>
+       <TextInput
+        variant="outlined"
+        label="Item Name"
+        placeholder="Spots"
+        style={{margin: 20}}
+        value={itemName}
+        onChange={event => setItemName(event.nativeEvent.text)}
+      />
+      <TextInput
+        variant="outlined"
+        label="Planned Amount"
+        placeholder="100"
+        keyboardType="numeric"
+        style={{margin: 20}}
+        value={plannedAmount}
+        onChange={event => setPlannedAmount(event.nativeEvent.text)}
+      />
+      <TextInput
+        variant="outlined"
+        placeholder="100"
+        keyboardType="numeric"
+        label="Actual Amount"
+        style={{margin: 20}}
+        value={actualAmount}
+        onChange={event => setActualAmount(event.nativeEvent.text)}
+      />
+      <Stack style={{ marginTop:18,flexDirection:'row',justifyContent:'center'}}>
+        <Button style={{marginHorizontal:5}} variant="contained" title='Save' color="rgb(38, 38, 38)" tintColor="white" onPress={()=>{handleSubmit()}}/>
+        <Button style={{marginHorizontal:5}} variant="contained" title='Show items' color="rgb(38, 38, 38)" tintColor="white" onPress={()=>navigation.navigate("ListingScreen")}/>
+      </Stack>
+    </Stack>
   );
 }
 
-const styles=StyleSheet.create({
-  group:{
-    marginHorizontal:30,
-    marginTop:50,
-  },
-  input:{
-    borderColor:'rgb(38, 38, 38)',
-    borderWidth:1,
-    marginBottom:25,
-    borderRadius:12
-  },
-  
-})
+
 
 
 export default EntryScreen;

@@ -11,6 +11,7 @@ function HomeStack() {
       backgroundColor:'rgb(38, 38, 38)',
     },
     headerTintColor:'white',
+    headerTitleAlign:'center',
     headerTitleStyle:{
       fontSize:20,
       fontWeight:'100',
