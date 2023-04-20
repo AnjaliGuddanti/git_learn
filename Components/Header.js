@@ -1,7 +1,7 @@
 import React,{useEffect,useState} from "react";
 import {View,Text,TouchableOpacity,StyleSheet} from 'react-native';
 import Icons from 'react-native-vector-icons/Ionicons';
-function Header({title,isHome,navigation,modify,onPress,favorite}){
+function Header({title,isHome,navigation,onPress,favorite}){
     const [fav,setfav]=useState(favorite)
     useEffect(()=>{
         setfav(favorite)
@@ -27,7 +27,8 @@ function Header({title,isHome,navigation,modify,onPress,favorite}){
                 <Text style={{fontWeight:'bold',fontSize:25,alignSelf:'center'}}>{title}</Text>
             </View>
             {
-                modify ?
+                isHome ? 
+                null:
                 fav? 
                 <TouchableOpacity style={{width:'15%'}} onPress={()=>handleFav()}>
                     <Icons name="star" size={30} style={{alignSelf:'center'}}/>
@@ -35,23 +36,7 @@ function Header({title,isHome,navigation,modify,onPress,favorite}){
                 <TouchableOpacity style={{width:'15%'}} onPress={()=>handleFav()}>
                     <Icons name="star-outline" size={30} style={{alignSelf:'center'}}/>
                 </TouchableOpacity>
-                :
-                null
             }
-              {/* if(favorite==='true'){
-                return(
-                    <TouchableOpacity style={{width:'25%'}} onPress={onPress}>
-                        <Icons name="star-outline" size={30} style={{alignSelf:'center'}}/>
-                    </TouchableOpacity>
-                );
-                }
-                else{
-                    <TouchableOpacity style={{width:'25%'}} onPress={onPress}>
-                        <Icons name="star-outline" size={30} style={{alignSelf:'center'}}/>
-                    </TouchableOpacity>
-                }
-          */}
-            
         </View>
     )
 }
@@ -61,6 +46,8 @@ const styles = StyleSheet.create({
       flexDirection: 'row',
       alignItems: 'center',
       padding: 10,
-    },}
-)
+    }
+})
+
+
 export default Header;

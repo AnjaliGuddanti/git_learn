@@ -2,36 +2,31 @@ import React,{useState,useEffect} from 'react';
 import { Text, View ,StyleSheet,TextInput,TouchableOpacity,Alert ,Image,ScrollView} from 'react-native';
 import ImagePickerCrop from 'react-native-image-crop-picker';
 import {openDatabase} from 'react-native-sqlite-storage';
-import Header from './Header';
+import Header from '../Components/Header';
 let db = openDatabase({name: 'ContactsDatabase.db'});
 function AddEditContact({navigation,route}) {
   const {data}=route.params;
-    const [name, setName] = useState('');
-    const [mobileNo, setMobileNo] = useState('');
-    const [photo, setPhoto] = useState('');
-    const [landlineNo, setLandlineNo] = useState('');
-    const [favorite,setFavorite]=useState(false)
-    const [Id,setId]=useState();
-    const [title,setTitle] =useState("Add New Contact")
+  const [name, setName] = useState('');
+  const [mobileNo, setMobileNo] = useState('');
+  const [photo, setPhoto] = useState('');
+  const [landlineNo, setLandlineNo] = useState('');
+  const [favorite,setFavorite]=useState(false)
+  const [Id,setId]=useState();
+  const [title,setTitle] =useState("Add New Contact")
   useEffect(() => {
-    console.log(data)
-   console.log(favorite)
     if(data.name){
       setName(data.name)
       setLandlineNo(data.landlineNo)
       setPhoto(data.photo)
       setMobileNo(data.mobileNo)
       setFavorite(data.favorite)
-      console.log(favorite)
       setTitle("Update Contact")
       setId(data.id);
     }
-    
     db.transaction(txn => {
       txn.executeSql(
         "SELECT name FROM sqlite_master WHERE type='table' AND name='table_contact'",
         [],
-       
         (tx, res) => {
           console.log("Create database working")
           console.log('item:', res.rows.length);
@@ -42,7 +37,6 @@ function AddEditContact({navigation,route}) {
               'CREATE TABLE IF NOT EXISTS table_contact(contact_id INTEGER PRIMARY KEY AUTOINCREMENT, name VARCHAR(20), mobileNo VARCHAR(20), photo VARCHAR(200),landlineNo VARCHAR(10),favorite INTEGER )',
               [],
             );
-           
           }
         },
         error => {
@@ -62,7 +56,7 @@ function AddEditContact({navigation,route}) {
       setPhoto(image.path)
     });
   }
-  const saveUser = () => {
+  const saveContact = () => {
     console.log(name,mobileNo,landlineNo)
     if( name && mobileNo  && landlineNo)
     {
@@ -92,15 +86,12 @@ function AddEditContact({navigation,route}) {
           );
         });
       }
-    
     else{
       Alert.alert('Error','Please Provide Contact Information...')
     }
-   
-    
   };
 
-  const updateUser = () => {
+  const updateContact = () => {
     if( name && mobileNo  && landlineNo)
     {
     db.transaction(tx => {
@@ -117,7 +108,7 @@ function AddEditContact({navigation,route}) {
               [
                 {
                   text: 'Ok',
-                  onPress: () => navigation.navigate('ContactList'),
+                  onPress: () => navigation.goBack(),
                 },
               ],
               {cancelable: false},
@@ -131,21 +122,8 @@ function AddEditContact({navigation,route}) {
     Alert.alert('Error','Please Provide Contact Information...')
   }
 };
-  
-  const getData = () => {
-      var temp = [];
-      db.transaction(tx => {
-        tx.executeSql('SELECT * FROM table_contact', [], (tx, results) => {
-          for (let i = 0; i < results.rows.length; ++i)
-          {
-              temp.push(results.rows.item(i));
-          }
-        });
-      });
-      return temp;
-  };
-
-  let deleteUser = id => {
+ 
+  let deleteContact = id => {
       db.transaction(tx => {
         tx.executeSql(
           'DELETE FROM  table_contact where contact_id=?',
@@ -177,7 +155,7 @@ function AddEditContact({navigation,route}) {
 
   return (
     <ScrollView>
-      <Header title={title} navigation={navigation} modify="Add"
+      <Header title={title} navigation={navigation} 
        favorite={favorite} onPress={(fav)=>{setFavorite(fav)}}/>
 
       <View style={{flex: 1,  alignItems: 'center', }}>
@@ -213,46 +191,37 @@ function AddEditContact({navigation,route}) {
         onChangeText={txt => setLandlineNo(txt)}
         style={[styles.input, {marginTop: 20}]}
       />
-      {/* <TextInput
-        placeholder="Enter Favorite "
-        value={favorite }
-        keyboardType='number-pad'
-        onChangeText={txt => setFavorite(txt)}
-        style={[styles.input, {marginTop: 20}]}
-      /> */}
       
       {data.name ? 
         <View style={{flexDirection:'row',justifyContent:'center'}}>
-         <TouchableOpacity
-         style={styles.addBtn}
-         onPress={() => {
-           updateUser();
-         }}>
-         <Text style={styles.btnText}>Update User </Text>
-       </TouchableOpacity>
-       <View style={styles.addBtn}>
           <TouchableOpacity
-          onPress={() => {
-              deleteUser(Id);
-                }}>
-              <Text style={styles.btnText}>delete</Text>
-        </TouchableOpacity>
-       </View>
-       
-     </View>
-       :
-          <TouchableOpacity
+            style={styles.addBtn}
+            onPress={() => {
+            updateContact();
+          }}>
+            <Text style={styles.btnText}>Update Contact </Text>
+          </TouchableOpacity>
+          <View style={styles.addBtn}>
+            <TouchableOpacity
+              onPress={() => {
+                deleteContact(Id);}}>
+            <Text style={styles.btnText}>delete</Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+        :
+        <TouchableOpacity
           style={styles.addBtn}
           onPress={() => {
-            saveUser();
+            saveContact();
           }}>
-          <Text style={styles.btnText}>Save User </Text>
+          <Text style={styles.btnText}>Save Contact </Text>
         </TouchableOpacity>
         }
       </View>
     </ScrollView>
   );
-                }
+  }
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -265,6 +234,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     paddingLeft: 20,
     marginTop: 30,
+    fontSize: 17,
   },
   addBtn: {
     backgroundColor: 'gray',

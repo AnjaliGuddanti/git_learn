@@ -24,18 +24,16 @@ const RightAction=({progress,dragX,onPress})=>{
 }
 const styles=StyleSheet.create({
     rightAction:{
-        backgroundColor:'green',
-        justifyContent:'center',
-        // alignItems:'flex-end',
-       height:65,
-       width:100
+      backgroundColor:'green',
+      justifyContent:'center',
+      height:60,
+      width:68
     },
     actionText:{
-        textAlign:'center',
-        color:'white',
-        fontWeight:'400',
-        fontSize:16
-        
+      textAlign:'center',
+      color:'white',
+      fontWeight:'400',
+      fontSize:20
     }
 })
   

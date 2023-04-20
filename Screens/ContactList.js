@@ -1,19 +1,13 @@
 import React,{useEffect,useState} from 'react';
-import { Text, View ,StyleSheet,TouchableOpacity,Image,TextInput,Alert, FlatList,Animated,
-  TouchableHighlight,
-  StatusBar,} from 'react-native';
-  import Swipeable from 'react-native-gesture-handler/Swipeable';
-// import { SwipeListView } from 'react-native-swipe-list-view';
-import RightAction from './RightAction';
-import Header from './Header'
+import {  View ,StyleSheet,Image,TextInput, FlatList,} from 'react-native';
+import Header from '../Components/Header';
+import Contact from '../Components/Contact';
 import Icons from 'react-native-vector-icons/Ionicons';
 import {openDatabase} from 'react-native-sqlite-storage';
 let db = openDatabase({name: 'ContactsDatabase.db'});
 function ContactList({navigation}) {
-  let list =[]
   const [searchName,setSearchName]=useState("");
   const [userList, setUserList] = useState([]);
-  
   useEffect(() => {
     getData()
   });
@@ -28,100 +22,17 @@ function ContactList({navigation}) {
         setUserList(temp)
       });
     });
-};
-const filterData = (data) => {
+  };
+  const filterData = (data) => {
     return data.filter((item) =>
       item.name.toLowerCase().includes(searchName.toLowerCase())
-    );}
-    const saveUser = () => {
-      db.transaction(function (tx) {
-        tx.executeSql(
-          'INSERT INTO table_contact (name, mobileNo, landlineNo,photo,favorite) VALUES (?,?,?,?,?)',
-          [name, mobileNo, landlineNo,photo,favorite],
-          (tx, results) => {
-            console.log('Results', results.rowsAffected);
-            if (results.rowsAffected > 0) {
-              Alert.alert(
-                'Success',
-                'You are Registered Successfully',
-                [
-                  {
-                    text: 'Ok',
-                    onPress: () => navigation.navigate('ContactList'),
-                  },
-                ],
-                {cancelable: false},
-              );
-            } else Alert.alert('Registration Failed');
-          },
-          error => {
-            console.log(error);
-          },
-        );
-      });
-    };
-  
-  const updateUser = () => {
-      db.transaction(tx => {
-        console.log(Id)
-        tx.executeSql(
-          'UPDATE table_contact set name=?, mobileNo=? , photo=?,landlineNo=?,favorite=? where contact_id=?',
-          [name, mobileNo, photo,landlineNo,favorite, Id],
-          (tx, results) => {
-            console.log('Results', results.rowsAffected);
-            if (results.rowsAffected > 0) {
-              Alert.alert(
-                'Success',
-                'User updated successfully',
-                [
-                  {
-                    text: 'Ok',
-                    onPress: () => navigation.navigate('ContactList'),
-                  },
-                ],
-                {cancelable: false},
-              );
-            } else Alert.alert('Updation Failed');
-          },
-        );
-      });
-  };
-  
-  
-  let deleteUser = id => {
-      db.transaction(tx => {
-        tx.executeSql(
-          'DELETE FROM  table_contact where contact_id=?',
-          [id],
-          (tx, results) => {
-            console.log('Results', results.rowsAffected);
-            if (results.rowsAffected > 0) {
-              Alert.alert(
-                'Success',
-                'User deleted successfully',
-                [
-                  {
-                    text: 'Ok',
-                    onPress: () => {
-                      getData();
-                    },
-                  },
-                ],
-                {cancelable: false},
-              );
-            } else {
-              Alert.alert('Please insert a valid Contact Id');
-            }
-          },
-        );
-      });
-  };
+   );
+  }
   return (
-    
     <View style={styles.container}>
       <Header title="Contact List" isHome="true" navigation={navigation}/>
       <View style={styles.searchWrapperStyle}>
-        <Icons size={18} name="search" color="black" style={styles.iconStyle} />
+        <Icons size={24} name="search" color="black" style={styles.iconStyle} />
         <TextInput
           placeholder="Search"
           placeholderTextColor="black"
@@ -133,7 +44,7 @@ const filterData = (data) => {
         />
         {searchName=='' ? null:
           <Icons
-          size={18}
+          size={24}
           name="close"
           color="black"
           style={styles.iconStyle}
@@ -143,90 +54,14 @@ const filterData = (data) => {
         />
         }  
       </View>
-     
       <View style={styles.listItems}>
-       <FlatList
-       data={filterData(userList)}
+      <FlatList
+        data={filterData(userList)}
         renderItem={({item, index}) => {
-          return (
-            <Swipeable renderRightActions={(progress,dragX)=><RightAction progress={progress} dragX={dragX} 
-            onPress={
-              ()=>{ navigation.navigate('AddEditContact', {
-              data: {
-                name: item.name,
-                mobileNo:item.mobileNo,
-                landlineNo:item.landlineNo,
-                photo:item.photo,
-                favorite:item.favorite,
-                id: item.contact_id,
-              },
-            } )} }/> } >
-    
-            <View style={styles.userItem}>
-              <View style={{flexDirection:'row'}}>
-                {item.photo ? (
-                      <Image source={{ uri: item.photo }} style={{ width: 58, height: 58,borderRadius:29 ,marginLeft:5}} />
-                    ) : (
-                      <Image source={require('../Assets/blankProfile.png')} style={{ width: 58, height: 58,borderRadius:29,marginLeft:5 }} />
-                    )}
-                <Text style={styles.itemText}>{ item.name}</Text>
-              </View>
-            </View>
-            </Swipeable>
-          );
-        }}/>
-      
-      {/* <FlatList
-       data={filterData(userList)}
-        renderItem={({item, index}) => {
-          return (
-            <View style={styles.userItem}>
-              <View style={{flexDirection:'row'}}>
-                {item.photo ? (
-                      <Image source={{ uri: item.photo }} style={{ width: 58, height: 58,borderRadius:29 ,marginLeft:5}} />
-                    ) : (
-                      <Image source={require('../Assets/blankProfile.png')} style={{ width: 58, height: 58,borderRadius:29,marginLeft:5 }} />
-                    )}
-                <Text style={styles.itemText}>{item.contact_id}.{ item.name}</Text>
-              </View>
-            </View>
-          );
-        }}
-        renderHiddenItem={ (rowData, rowMap) => (
-          <View>
-              <View>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('AddEditContact', {
-                      data: {
-                        name: rowData.item.name,
-                        mobileNo: rowData.item.mobileNo,
-                        landlineNo: rowData.item.landlineNo,
-                        photo:rowData.item.photo,
-                        favorite:rowData.item.favorite,
-                        id: rowData.item.contact_id,
-                      },
-                    });
-                  }}>
-                  <Text>Edit</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.belowView}>
-                  <TouchableOpacity
-                    onPress={() => {
-                    deleteUser( rowData.item.contact_id);
-                  }}>
-                    <Text>delete</Text>
-                  </TouchableOpacity>
-              </View>
-          </View>
-        )}
-        leftOpenValue={300}
-        rightOpenValue={-75} */}
-      {/* /> */}
-      
+        return(
+        <Contact item={item} navigation={navigation}/>
+      )}}/>
       </View>
-    
       <View style={styles.addButton}>
         <Icons name='add-circle' size={55} color='gray' onPress={()=>{
           navigation.navigate('AddEditContact',{ data: {}})
@@ -263,27 +98,13 @@ const styles = StyleSheet.create({
   },
   searchInputStyle: {
     flex: 1,
-    fontSize: 16,
+    fontSize: 18,
     margin: 0,
   },
   listItems:{
    height:'68%'
   },
-  userItem: {
-    padding: 8,
-    height:70,
-    
-  },
-  itemText: {
-    flex:1,
-    fontSize: 20,
-    fontWeight: '600',
-    color: '#000',
-    alignSelf:'center',
-    marginLeft:16,
-   
-  },
-  
+ 
 });
 
 
