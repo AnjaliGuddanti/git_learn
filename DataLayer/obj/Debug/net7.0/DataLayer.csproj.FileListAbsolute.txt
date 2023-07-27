@@ -1,0 +1,24 @@
+C:\Users\guddantianjali\Desktop\NotificationSystem\DataLayer\bin\Debug\net7.0\DataLayer.deps.json
+C:\Users\guddantianjali\Desktop\NotificationSystem\DataLayer\bin\Debug\net7.0\DataLayer.dll
+C:\Users\guddantianjali\Desktop\NotificationSystem\DataLayer\bin\Debug\net7.0\DataLayer.pdb
+C:\Users\guddantianjali\Desktop\NotificationSystem\DataLayer\obj\Debug\net7.0\DataLayer.csproj.AssemblyReference.cache
+C:\Users\guddantianjali\Desktop\NotificationSystem\DataLayer\obj\Debug\net7.0\DataLayer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\guddantianjali\Desktop\NotificationSystem\DataLayer\obj\Debug\net7.0\DataLayer.AssemblyInfoInputs.cache
+C:\Users\guddantianjali\Desktop\NotificationSystem\DataLayer\obj\Debug\net7.0\DataLayer.AssemblyInfo.cs
+C:\Users\guddantianjali\Desktop\NotificationSystem\DataLayer\obj\Debug\net7.0\DataLayer.csproj.CoreCompileInputs.cache
+C:\Users\guddantianjali\Desktop\NotificationSystem\DataLayer\obj\Debug\net7.0\DataLayer.dll
+C:\Users\guddantianjali\Desktop\NotificationSystem\DataLayer\obj\Debug\net7.0\refint\DataLayer.dll
+C:\Users\guddantianjali\Desktop\NotificationSystem\DataLayer\obj\Debug\net7.0\DataLayer.pdb
+C:\Users\guddantianjali\Desktop\NotificationSystem\DataLayer\obj\Debug\net7.0\ref\DataLayer.dll
+C:\Users\guddantianjali\OneDrive - Nagarro\Desktop\NotificationSystem\DataLayer\bin\Debug\net7.0\DataLayer.deps.json
+C:\Users\guddantianjali\OneDrive - Nagarro\Desktop\NotificationSystem\DataLayer\bin\Debug\net7.0\DataLayer.dll
+C:\Users\guddantianjali\OneDrive - Nagarro\Desktop\NotificationSystem\DataLayer\bin\Debug\net7.0\DataLayer.pdb
+C:\Users\guddantianjali\OneDrive - Nagarro\Desktop\NotificationSystem\DataLayer\obj\Debug\net7.0\DataLayer.csproj.AssemblyReference.cache
+C:\Users\guddantianjali\OneDrive - Nagarro\Desktop\NotificationSystem\DataLayer\obj\Debug\net7.0\DataLayer.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\guddantianjali\OneDrive - Nagarro\Desktop\NotificationSystem\DataLayer\obj\Debug\net7.0\DataLayer.AssemblyInfoInputs.cache
+C:\Users\guddantianjali\OneDrive - Nagarro\Desktop\NotificationSystem\DataLayer\obj\Debug\net7.0\DataLayer.AssemblyInfo.cs
+C:\Users\guddantianjali\OneDrive - Nagarro\Desktop\NotificationSystem\DataLayer\obj\Debug\net7.0\DataLayer.csproj.CoreCompileInputs.cache
+C:\Users\guddantianjali\OneDrive - Nagarro\Desktop\NotificationSystem\DataLayer\obj\Debug\net7.0\DataLayer.dll
+C:\Users\guddantianjali\OneDrive - Nagarro\Desktop\NotificationSystem\DataLayer\obj\Debug\net7.0\refint\DataLayer.dll
+C:\Users\guddantianjali\OneDrive - Nagarro\Desktop\NotificationSystem\DataLayer\obj\Debug\net7.0\DataLayer.pdb
+C:\Users\guddantianjali\OneDrive - Nagarro\Desktop\NotificationSystem\DataLayer\obj\Debug\net7.0\ref\DataLayer.dll
