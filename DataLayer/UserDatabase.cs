@@ -37,4 +37,14 @@ public class UserDatabase:IUserDatabase
     {
         return users.Where(u => u.ChannelType==2);
     }
+
+    public void AddUser(UserData userData)
+    {
+        
+    }
+
+    public void RemoveUser(UserData userData)
+    {
+        throw new NotImplementedException();
+    }
 }
